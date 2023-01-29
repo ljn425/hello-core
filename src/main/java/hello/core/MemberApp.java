@@ -4,13 +4,21 @@ import hello.core.member.Grade;
 import hello.core.member.Member;
 import hello.core.member.MemberService;
 import hello.core.member.MemberServiceImpl;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class MemberApp {
 
     public static void main(String[] args) {
-        // MemberService memberService = new MemberServiceImpl(memberRepository);
-        AppConfig appConfig = new AppConfig();
-        MemberService memberService = appConfig.memberService();
+//        AppConfig appConfig = new AppConfig();
+//        MemberService memberService = appConfig.memberService();
+
+        /* ApplicationContext : @Bean 즉 구현 객체들의 생성과 관리를 하는 클래스
+            AnnotationConfigApplicationContext(config 객체) : 애노테이션 설정 클래스로 config 객체를 매개변수로 받으면 그 객체의 정보를 가져와 반환한다.
+         */
+        ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
+        // ac.getBean("@Bean 선언된 메서드의 이름", 리턴타입)
+        MemberService memberService = ac.getBean("memberService", MemberService.class);
         Member member = new Member(1L, "memberA", Grade.VIP);
         memberService.join(member);
 
